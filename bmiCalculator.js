@@ -1,0 +1,85 @@
+/**
+ * Bmi calculator
+ */
+function calculateBmi(){
+    var form=document.getElementById("bmiForm");
+    var showNumber=document.getElementById("resultBMI");
+    if(showNumber.firstChild){
+        showNumber.removeChild(showNumber.firstChild);
+    }
+    if(!validateBmiForm(form[0].value)){
+        return;
+    }
+    var height = parseFloat(form[0].value).toFixed(2);
+    if(form[1].value==='feet'){ //convert to cm
+        height = height * 30.40;
+        height=height.toFixed(1);
+    }
+    height /= 100;
+    if(!validateBmiForm(form[2].value)){
+        return
+    }
+    var weight = parseFloat(form[2].value).toFixed(1);
+    if(form[3].value==='lbs'){ //convert to kg
+        weight =  weight / 2.2046;
+        weight = weight.toFixed(1);
+    }
+    var result = (weight/(height*height)).toFixed(1);
+    showNumber.innerText=result;
+    if(result>=40) showNumber.style.color='red';
+    else if(result>35)  showNumber.style.color='orangered';
+    else if(result>30)  showNumber.style.color='purple';
+    else if(result>25)  showNumber.style.color='darkgoldenrod';
+    else if(result>18.5)  showNumber.style.color='greenyellow';
+    else if(result<18.5)  showNumber.style.color='red';
+}
+/**
+ * Refresh form according to unit
+ */
+function refreshHeightPlaceholder() {
+    var form = document.getElementById("bmiForm");
+    form[0].value=null;
+    if (form[1].value === 'feet') {
+        form[0].placeholder='5.9';
+    }else{
+        form[0].placeholder='180';
+    }
+}
+/**
+ * Refresh form according to unit
+ */
+function refreshWeightPlaceholder(){
+    var form=document.getElementById("bmiForm");
+    form[2].value=null;
+    if(form[3].value==='lbs'){
+        form[2].placeholder='165';
+    }else{
+        form[2].placeholder='75';
+    }
+}
+/**
+ * Validate form in the BMI calculator
+ * @param value
+ * @returns {boolean}
+ */
+function validateBmiForm(value){
+    var isOnlyNumber = function(value){ //test if value from form is only number
+        return (/^[0-9.]*$/).test(value) ;
+    };
+    var containsComma = function(value){
+        return value.indexOf(',') !== -1;
+    };
+    if(value==null||value==""){
+        alert("Значения должны быть заполнены");
+        return false;
+    }
+    if(!isOnlyNumber(value)){
+        alert("Рост / вес должны содержать только цифры!");
+        return false;
+    }
+    if(containsComma(value)){
+        alert("Пожалуйста, используйте точку вместо запятой в десятичных числах!");
+        return false;
+    }
+    return true;
+}
